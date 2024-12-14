@@ -60,6 +60,13 @@
         	<artifactId>commons-csv</artifactId>
         	<version>1.8</version>
     	</dependency>
+    	
+    	<!-- OpenCSV for CSV generation -->
+    	<dependency>
+        	<groupId>com.opencsv</groupId>
+        	<artifactId>opencsv</artifactId>
+        	<version>5.6</version>
+    	</dependency>
 	</dependencies>
 
 	<build>
