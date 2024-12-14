@@ -80,7 +80,7 @@ public class CanEntity {
 
 	private Double prevClose;
 
-	private Double cusip;
+	private String cusip;
 
 	private Double maintenaceMargin;
 
@@ -557,14 +557,14 @@ public class CanEntity {
 	/**
 	 * @return the cusip
 	 */
-	public Double getCusip() {
+	public String getCusip() {
 		return cusip;
 	}
 
 	/**
 	 * @param cusip the cusip to set
 	 */
-	public void setCusip(Double cusip) {
+	public void setCusip(String cusip) {
 		this.cusip = cusip;
 	}
 

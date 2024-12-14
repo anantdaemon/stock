@@ -3,6 +3,7 @@ package com.stockexample.stock.service.impl;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -44,59 +45,63 @@ public class StockDataServiceImpl implements StockDataService {
 		extractedDate.setLoadDate(extractDateFromFilePath(csvFilePath));
 		System.out.println("extractedDate : " + extractedDate);
 		extractedDate = dateTimeExtractor(extractedDate);
-
+		// Extract the file name from the full path
+        String fileName = Paths.get(csvFilePath).getFileName().toString();
+        
+        
 		for (CSVRecord record : records) {
+			
 			System.out.println(record.toString());
 			CanEntity canStk = new CanEntity();
 			canStk.setDate(extractedDate.getLoadDate());
 			canStk.setDayOfWeek(extractedDate.getDayOfWeek());
 			canStk.setWeekOfMonth(extractedDate.getWeekOfMonth());
 			canStk.setWeekOfYear(extractedDate.getWeekOfYear());
-			canStk.setWatchList(null);
+			canStk.setWatchList(fileName);
 			canStk.setSymbol(record.get("Symbol"));
 			canStk.setDescription(record.get("Description"));
-			canStk.setVolume(Long.parseLong(record.get("Volume")));
-			canStk.setpChange(Double.parseDouble(record.get("% Change")));
+			canStk.setVolume(isNullOrEmpty(record.get("Volume")) ? null : Long.parseLong(record.get("Volume").replace(",", "")));
+			canStk.setpChange(isNullOrEmpty(record.get("% Change")) ? null : Double.parseDouble(record.get("% Change").replace(",", "")));
 			canStk.setmCap(record.get("Market Cap."));
-			//canStk.setShares(record.get("Shares"));
-			canStk.setBeta(Double.parseDouble(record.get("Beta")));
-			canStk.setMark(Double.parseDouble(record.get("Mark")));
-			canStk.setLast(Double.parseDouble(record.get("Last")));
-			canStk.setOpenInt(Long.parseLong(record.get("Open Int")));
-			canStk.setSpread(Double.parseDouble(record.get("Spread")));
-			canStk.setNetChange(Double.parseDouble(record.get("Net Change")));
-			canStk.setBidSize(Long.parseLong(record.get("Bid Size")));
-			canStk.setSize(Long.parseLong(record.get("Size")));
-			canStk.setAskSize(Long.parseLong(record.get("Ask Size")));
-			canStk.setLastSize(Long.parseLong(record.get("Last Size")));
+			canStk.setShares(record.get("Shares"));
+			canStk.setBeta(isNullOrEmpty(record.get("Beta")) ? null : Double.parseDouble(record.get("Beta").replace(",", "")));
+			canStk.setMark(isNullOrEmpty(record.get("Mark")) ? null : Double.parseDouble(record.get("Mark").replace(",", "")));
+			canStk.setLast(isNullOrEmpty(record.get("Last")) ? null : Double.parseDouble(record.get("Last").replace(",", "")));
+			canStk.setOpenInt(isNullOrEmpty(record.get("Open Int")) ? null : Long.parseLong(record.get("Open Int").replace(",", "")));
+			canStk.setSpread(isNullOrEmpty(record.get("Spread")) ? null : Double.parseDouble(record.get("Spread").replace(",", "")));
+			canStk.setNetChange(isNullOrEmpty(record.get("Net Change")) ? null : Double.parseDouble(record.get("Net Change").replace(",", "")));
+			canStk.setBidSize(isNullOrEmpty(record.get("Bid Size")) ? null : Long.parseLong(record.get("Bid Size").replace(",", "")));
+			canStk.setSize(isNullOrEmpty(record.get("Size")) ? null : Long.parseLong(record.get("Size")));
+			canStk.setAskSize(isNullOrEmpty(record.get("Ask Size")) ? null : Long.parseLong(record.get("Ask Size").replace(",", "")));
+			canStk.setLastSize(isNullOrEmpty(record.get("Last Size")) ? null : Long.parseLong(record.get("Last Size").replace(",", "")));
 			canStk.setInstrument(record.get("Instrument"));
-			canStk.setOpenPrice(Double.parseDouble(record.get("Open")));
-			canStk.setFiftyTwotWeekLow(Double.parseDouble(record.get("52 week Low")));
-			canStk.setLow(Double.parseDouble(record.get("Low")));
-			canStk.setBid(Double.parseDouble(record.get("Bid")));
-			canStk.setAsk(Double.parseDouble(record.get("Ask")));
-			canStk.setHigh(Double.parseDouble(record.get("High")));
-			canStk.setPrevClose(Double.parseDouble(record.get("Prev Close")));
-			canStk.setFiftyTwotWeekHigh(Double.parseDouble(record.get("52 week High")));
-			canStk.setCusip(Double.parseDouble(record.get("CUSIP")));
-			canStk.setMaintenaceMargin(Double.parseDouble(record.get("Maintenance Margin")));
-			canStk.setDaysToExpire(Integer.parseInt(record.get("Days To Expiration")));
-			canStk.setDelta(Double.parseDouble(record.get("Delta")));
+			canStk.setOpenPrice(isNullOrEmpty(record.get("Open")) ? null : Double.parseDouble(record.get("Open").replace(",", "")));
+			canStk.setFiftyTwotWeekLow(isNullOrEmpty(record.get("52 week Low")) ? null : Double.parseDouble(record.get("52 week Low").replace(",", "")));
+			canStk.setLow(isNullOrEmpty(record.get("Low")) ? null : Double.parseDouble(record.get("Low").replace(",", "")));
+			canStk.setBid(isNullOrEmpty(record.get("Bid")) ? null : Double.parseDouble(record.get("Bid").replace(",", "")));
+			canStk.setAsk(isNullOrEmpty(record.get("Ask")) ? null : Double.parseDouble(record.get("Ask").replace(",", "")));
+			canStk.setHigh(isNullOrEmpty(record.get("High")) ? null : Double.parseDouble(record.get("High").replace(",", "")));
+			canStk.setPrevClose(isNullOrEmpty(record.get("Prev Close")) ? null : Double.parseDouble(record.get("Prev Close").replace(",", "")));
+			canStk.setFiftyTwotWeekHigh(isNullOrEmpty(record.get("52 week High")) ? null : Double.parseDouble(record.get("52 week High").replace(",", "")));
+			canStk.setCusip(record.get("CUSIP"));
+			canStk.setMaintenaceMargin(isNullOrEmpty(record.get("Maintenance Margin")) ? null : Double.parseDouble(record.get("Maintenance Margin").replace(",", "")));
+			canStk.setDaysToExpire(isNullOrEmpty(record.get("Days To Expiration")) ? null : Integer.parseInt(record.get("Days To Expiration").replace(",", "")));
+			canStk.setDelta(isNullOrEmpty(record.get("Delta")) ? null : Double.parseDouble(record.get("Delta").replace(",", "")));
 			canStk.setExpirationDate(record.get("Expiration Date"));
 			canStk.setFirstNoticeDate(record.get("First Notice Date"));
-			canStk.setImpVolume(Double.parseDouble(record.get("Impl Vol")));
-			canStk.setGamma(Double.parseDouble(record.get("Gamma")));
+			canStk.setImpVolume(isNullOrEmpty(record.get("Impl Vol")) ? null : Double.parseDouble(record.get("Impl Vol").replace(",", "")));
+			canStk.setGamma(isNullOrEmpty(record.get("Gamma")) ? null : Double.parseDouble(record.get("Gamma").replace(",", "")));
 			canStk.setTradingHalt(record.get("Trading Halt"));
 			canStk.setLastTradeDate(record.get("Last Trade Date"));
-			canStk.setLimitDown(Double.parseDouble(record.get("Limit Down")));
-			canStk.setLimitUp(Double.parseDouble(record.get("Limit Up")));
-			canStk.setRho(Double.parseDouble(record.get("Rho")));
-			canStk.setTheoPrice(Double.parseDouble(record.get("Theo Price")));
-			canStk.setStrike(Double.parseDouble(record.get("Strike")));
-			canStk.setTheta(Double.parseDouble(record.get("Theta")));
-			canStk.setTickValue(Double.parseDouble(record.get("Tick Value")));
-			canStk.setVega(Double.parseDouble(record.get("Vega")));
-			
+			canStk.setLimitDown(isNullOrEmpty(record.get("Limit Down")) ? null : Double.parseDouble(record.get("Limit Down").replace(",", "")));
+			canStk.setLimitUp(isNullOrEmpty(record.get("Limit Up")) ? null : Double.parseDouble(record.get("Limit Up").replace(",", "")));
+			canStk.setRho(isNullOrEmpty(record.get("Rho")) ? null : Double.parseDouble(record.get("Rho").replace(",", "")));
+			canStk.setTheoPrice(isNullOrEmpty(record.get("Theo Price")) ? null : Double.parseDouble(record.get("Theo Price").replace(",", "")));
+			canStk.setStrike(isNullOrEmpty(record.get("Strike")) ? null : Double.parseDouble(record.get("Strike").replace(",", "")));
+			canStk.setTheta(isNullOrEmpty(record.get("Theta")) ? null : Double.parseDouble(record.get("Theta").replace(",", "")));
+			canStk.setTickValue(isNullOrEmpty(record.get("Tick Value")) ? null : Double.parseDouble(record.get("Tick Value").replace(",", "")));
+			canStk.setVega(isNullOrEmpty(record.get("Vega")) ? null : Double.parseDouble(record.get("Vega").replace(",", "")));
+		
 			lsData.add(canStk);
 		}
 
@@ -109,7 +114,7 @@ public class StockDataServiceImpl implements StockDataService {
 	 * @param filePath
 	 * @return
 	 */
-	public static String extractDateFromFilePath(String filePath) {
+	private static String extractDateFromFilePath(String filePath) {
 		// Regular expression for date format (yyyy-MM-dd)
 		Pattern datePattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})");
 		Matcher matcher = datePattern.matcher(filePath);
@@ -127,7 +132,7 @@ public class StockDataServiceImpl implements StockDataService {
 	 * @param extractedDate
 	 * @return
 	 */
-	public DateData dateTimeExtractor(DateData extractedDate) {
+	private DateData dateTimeExtractor(DateData extractedDate) {
 
 		// Parse the string into a LocalDate object
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -148,4 +153,13 @@ public class StockDataServiceImpl implements StockDataService {
 		return extractedDate;
 	}
 
+	/**
+	 * Method to check whether string is empty or null.
+	 * 
+	 * @param field
+	 * @return
+	 */
+	private static boolean isNullOrEmpty(String field) {
+        return field == null || field.trim().isEmpty();
+    }
 }
