@@ -3,7 +3,10 @@ package com.stockexample.stock.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,15 +19,19 @@ public class StockDataController {
 	@Autowired
 	private StockDataService stockService;
 
-	String filePath = "C:\\Users\\Hp\\Downloads\\Anoop\\Input\\Canada1\\2024-12-12\\206ll.csv";
+	//String filePath1 = "C:\\Users\\Hp\\Downloads\\Anoop\\Input\\Canada1\\2024-12-12\\206ll.csv";
 
 	@PostMapping("/uploadcanada")
-	public String uploadCanadaData() {
+	public ResponseEntity<String> uploadCanadaData(@RequestBody String requestPath) {
+
 		try {
-			stockService.uploadCanadaData(filePath);
-			return "Data uploaded successfully!";
+			System.out.println("!!! Inside Controller !!!");
+			System.out.println("uploadCanadaData - Method");
+
+				stockService.uploadCanadaData(requestPath);
+			return new ResponseEntity<>("Data uploaded successfully!", HttpStatus.OK);
 		} catch (IOException e) {
-			return "Error uploading data: " + e.getMessage();
+			return new ResponseEntity<>("Error reading the file.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
