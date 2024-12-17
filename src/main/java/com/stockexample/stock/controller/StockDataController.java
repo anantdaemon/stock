@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stockexample.stock.dto.FilePathRequest;
 import com.stockexample.stock.service.StockDataService;
 
 @RestController
@@ -22,7 +23,7 @@ public class StockDataController {
 	//String filePath1 = "C:\\Users\\Hp\\Downloads\\Anoop\\Input\\Canada1\\2024-12-12\\206ll.csv";
 
 	@PostMapping("/uploadcanada")
-	public ResponseEntity<String> uploadCanadaData(@RequestBody String requestPath) {
+	public ResponseEntity<String> uploadCanadaData(@RequestBody FilePathRequest requestPath) {
 
 		try {
 			System.out.println("!!! Inside Controller !!!");
